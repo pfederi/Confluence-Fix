@@ -1,0 +1,14 @@
+# Internal blog post (not for public release)
+BLOG-POST.md
+
+# macOS
+.DS_Store
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+

@@ -1,0 +1,2 @@
+Browser extension that fixes the annoying cursor jump bug in Confluence edit mode. Works automatically on all Confluence pages - no more scrolling back down after the cursor jumps to the top.
+

@@ -1,4 +1,4 @@
-# Confluence Cursor Fix v1.0.1
+# Confluence Cursor Fix v1.0.2
 
 Fix the annoying cursor jump bug in Confluence edit mode with this browser extension.
 

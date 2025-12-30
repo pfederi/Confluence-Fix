@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Confluence Cursor Fix",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fixes the cursor jump bug in Confluence edit mode",
   "icons": {
     "16": "icons/icon16.png",

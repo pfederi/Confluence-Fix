@@ -48,7 +48,17 @@ This ZIP file contains everything you need to install the Confluence Cursor Fix 
 
 ## Version
 
-Version 1.0.1
+Version 1.0.2
+
+## Changelog
+
+### v1.0.2 (2025-12-30)
+- **Improved Fix Stability**: Enhanced CSS fixes with additional properties (minHeight, overflow)
+- **Better HTML Element Handling**: Fix now also applies to documentElement for more consistent behavior
+- **Simplified Approach**: Removed aggressive periodic checks for better performance
+
+### v1.0.1 (2025-12-30)
+- Initial release with toggle, URL whitelist, and dynamic icons
 
 ## Support
 

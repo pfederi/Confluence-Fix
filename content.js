@@ -94,7 +94,18 @@
                     if (originalHeight === null) {
                         originalHeight = contentDoc.body.style.height;
                     }
+                    
+                    // Apply multiple fixes for better stability
                     contentDoc.body.style.height = 'auto';
+                    contentDoc.body.style.minHeight = 'auto';
+                    contentDoc.body.style.overflow = 'visible';
+                    
+                    // Also fix the html element
+                    if (contentDoc.documentElement?.style) {
+                        contentDoc.documentElement.style.height = 'auto';
+                        contentDoc.documentElement.style.minHeight = 'auto';
+                    }
+                    
                     console.log('Confluence Cursor Fix: Applied height fix to editor');
                     return true;
                 }
