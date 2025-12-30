@@ -48,7 +48,7 @@ This ZIP file contains everything you need to install the Confluence Cursor Fix 
 
 ## Version
 
-Version 1.0.0
+Version 1.0.1
 
 ## Support
 
