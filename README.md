@@ -37,23 +37,6 @@ This extension automatically applies the official Atlassian workaround without r
 
 **Note for Firefox**: Temporary add-ons are removed when Firefox restarts. For permanent installation, the extension must be signed by Mozilla.
 
-## Creating Icons
-
-The extension requires icons in two color versions (blue and gray) and three sizes each (16x16, 48x48, 128x128 pixels).
-
-### Option 1: Auto-generate (Recommended)
-1. Open the file `icons/download-icons.html` in your browser
-2. Click "Generate & Download All Icons"
-3. Six PNG files will be automatically downloaded:
-   - **Blue icons** (active on Confluence): `icon16.png`, `icon48.png`, `icon128.png`
-   - **Gray icons** (inactive on other sites): `icon16-gray.png`, `icon48-gray.png`, `icon128-gray.png`
-4. Move all downloaded files to the `icons/` folder
-
-### Option 2: Use custom icons
-Create or use your own PNG icons in sizes 16x16, 48x48, and 128x128 pixels and save them as:
-- **Blue versions**: `icons/icon16.png`, `icons/icon48.png`, `icons/icon128.png`
-- **Gray versions**: `icons/icon16-gray.png`, `icons/icon48-gray.png`, `icons/icon128-gray.png`
-
 ## Usage
 
 After installation, the extension works automatically:

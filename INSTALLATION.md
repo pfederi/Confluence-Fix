@@ -1,15 +1,6 @@
 # Quick Start Guide
 
-## Step 1: Create Icons
-
-1. Open `icons/download-icons.html` in your browser (just double-click it)
-2. Click the "Generate & Download All Icons" button
-3. Six PNG files will be downloaded:
-   - Blue icons: `icon16.png`, `icon48.png`, `icon128.png`
-   - Gray icons: `icon16-gray.png`, `icon48-gray.png`, `icon128-gray.png`
-4. Move all six files to the `icons/` folder (replace existing placeholder files)
-
-## Step 2: Install Extension
+## Step 1: Install Extension
 
 ### For Chrome, Edge, Brave:
 
@@ -25,7 +16,7 @@
 3. Click "Load Temporary Add-on"
 4. Select the `manifest.json` file
 
-## Step 3: Test
+## Step 2: Test
 
 1. Open a Confluence page
 2. Switch to edit mode
