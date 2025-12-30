@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Confluence Cursor Fix</title>
+    <style>
+        body {
+            width: 350px;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            color: #0052CC;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .icon {
+            font-size: 24px;
+        }
+        
+        .toggle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .toggle-label {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 26px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #0052CC;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        
+        .status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            text-align: center;
+        }
+        
+        .status.enabled {
+            background: #e3f2fd;
+            color: #0052CC;
+        }
+        
+        .status.disabled {
+            background: #f5f5f5;
+            color: #666;
+        }
+        
+        .info {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .url-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .url-section h2 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .url-info {
+            margin: 0 0 15px 0;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .url-input-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .url-input-container input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+        
+        .url-input-container input:focus {
+            outline: none;
+            border-color: #0052CC;
+        }
+        
+        .url-input-container button {
+            padding: 8px 16px;
+            background: #0052CC;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .url-input-container button:hover {
+            background: #0747A6;
+        }
+        
+        .url-list {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .url-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+        
+        .url-item .url-text {
+            flex: 1;
+            color: #333;
+            word-break: break-all;
+        }
+        
+        .url-item .remove-btn {
+            background: none;
+            border: none;
+            color: #d32f2f;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 4px;
+            margin-left: 8px;
+        }
+        
+        .url-item .remove-btn:hover {
+            color: #b71c1c;
+        }
+        
+        .url-list:empty::before {
+            content: 'No URLs added. Fix will work on all Confluence sites.';
+            display: block;
+            padding: 12px;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        
+        .footer {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <span class="icon">🔧</span>
+            Confluence Cursor Fix
+        </h1>
+        
+        <div class="toggle-container">
+            <span class="toggle-label">Enable Fix</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="enableToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        
+        <div class="status" id="status">
+            Loading...
+        </div>
+        
+        <div class="info">
+            This extension fixes the cursor jump bug in Confluence edit mode. Toggle to enable or disable the fix.
+        </div>
+        
+        <div class="url-section">
+            <h2>Active URLs</h2>
+            <p class="url-info">Add URLs where the fix should be active. Leave empty to work on all Confluence sites.</p>
+            
+            <div class="url-input-container">
+                <input type="text" id="urlInput" placeholder="e.g., confluence.company.com">
+                <button id="addUrlBtn">Add</button>
+            </div>
+            
+            <div class="url-list" id="urlList">
+                <!-- URLs will be added here dynamically -->
+            </div>
+        </div>
+        
+        <div class="footer">
+            Version 1.0.0
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
+
