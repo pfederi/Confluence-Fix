@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlInput = document.getElementById('urlInput');
     const addUrlBtn = document.getElementById('addUrlBtn');
     const urlList = document.getElementById('urlList');
+    const notifyWatchersToggle = document.getElementById('notifyWatchersToggle');
     
     let allowedUrls = [];
     let isOnConfluence = false;
@@ -19,11 +20,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     // Load current state
-    const result = await chrome.storage.sync.get(['enabled', 'allowedUrls']);
+    const result = await chrome.storage.sync.get(['enabled', 'allowedUrls', 'notifyWatchers']);
     const isEnabled = result.enabled !== false; // Default to true
     allowedUrls = result.allowedUrls || [];
+    const notifyWatchers = result.notifyWatchers !== false; // Default to true (Confluence default)
     
     toggle.checked = isEnabled;
+    notifyWatchersToggle.checked = notifyWatchers;
     updateStatus(isEnabled, isOnConfluence);
     renderUrlList();
     
@@ -32,6 +35,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         const enabled = e.target.checked;
         await chrome.storage.sync.set({ enabled });
         updateStatus(enabled, isOnConfluence);
+        notifyAllTabs();
+    });
+    
+    // Listen for notify watchers toggle changes
+    notifyWatchersToggle.addEventListener('change', async (e) => {
+        const notifyWatchers = e.target.checked;
+        await chrome.storage.sync.set({ notifyWatchers });
         notifyAllTabs();
     });
     
@@ -106,7 +116,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             chrome.tabs.sendMessage(tab.id, { 
                 action: 'updateSettings',
                 enabled: toggle.checked,
-                allowedUrls: allowedUrls
+                allowedUrls: allowedUrls,
+                notifyWatchers: notifyWatchersToggle.checked
             }).catch(() => {
                 // Ignore errors for tabs that don't have the content script
             });

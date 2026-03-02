@@ -6,13 +6,15 @@
     
     let isEnabled = true; // Default to enabled
     let allowedUrls = []; // URLs where the fix should be active (empty = all sites)
+    let notifyWatchers = true; // Default to true (Confluence default)
     let originalHeight = null; // Store original height for reverting
     
     // Load settings from storage
-    chrome.storage.sync.get(['enabled', 'allowedUrls'], (result) => {
+    chrome.storage.sync.get(['enabled', 'allowedUrls', 'notifyWatchers'], (result) => {
         isEnabled = result.enabled !== false; // Default to true
         allowedUrls = result.allowedUrls || [];
-        console.log('Confluence Cursor Fix: Loaded settings - enabled:', isEnabled, 'URLs:', allowedUrls);
+        notifyWatchers = result.notifyWatchers !== false; // Default to true
+        console.log('Confluence Cursor Fix: Loaded settings - enabled:', isEnabled, 'URLs:', allowedUrls, 'notifyWatchers:', notifyWatchers);
         
         const onConfluence = isConfluencePage();
         
@@ -26,6 +28,11 @@
         
         if (isEnabled && onConfluence && isUrlAllowed()) {
             applyEditorFix();
+        }
+        
+        // Set notify watchers checkbox
+        if (onConfluence) {
+            setNotifyWatchersCheckbox();
         }
     });
     
@@ -44,13 +51,18 @@
         } else if (message.action === 'updateSettings') {
             isEnabled = message.enabled;
             allowedUrls = message.allowedUrls || [];
-            console.log('Confluence Cursor Fix: Settings updated - enabled:', isEnabled, 'URLs:', allowedUrls);
+            notifyWatchers = message.notifyWatchers !== undefined ? message.notifyWatchers : true;
+            console.log('Confluence Cursor Fix: Settings updated - enabled:', isEnabled, 'URLs:', allowedUrls, 'notifyWatchers:', notifyWatchers);
             
             if (isEnabled && isUrlAllowed()) {
                 applyEditorFix();
             } else {
                 removeEditorFix();
             }
+            
+            // Update notify watchers checkbox
+            setNotifyWatchersCheckbox();
+            
             sendResponse({ success: true });
         }
     });
@@ -204,6 +216,68 @@
         console.log('Confluence Cursor Fix: Observing DOM for editor');
     }
 
+    // Set the "Notify watchers" checkbox state
+    function setNotifyWatchersCheckbox() {
+        try {
+            // Find the notify watchers checkbox
+            // Common selectors for Confluence's notify watchers checkbox
+            const selectors = [
+                '#notifyWatchers',
+                'input[name="notifyWatchers"]',
+                'input[type="checkbox"][id*="notify"]',
+                'input[type="checkbox"][name*="notify"]'
+            ];
+            
+            for (const selector of selectors) {
+                const checkbox = document.querySelector(selector);
+                if (checkbox && checkbox.type === 'checkbox') {
+                    checkbox.checked = notifyWatchers;
+                    console.log('Confluence Cursor Fix: Set notify watchers to', notifyWatchers);
+                    
+                    // Also set up observer to reset it if Confluence changes it
+                    observeNotifyWatchersCheckbox(checkbox);
+                    return true;
+                }
+            }
+            
+            console.log('Confluence Cursor Fix: Notify watchers checkbox not found yet');
+        } catch (e) {
+            console.error('Confluence Cursor Fix: Error setting notify watchers', e);
+        }
+        return false;
+    }
+    
+    // Observe the notify watchers checkbox and reset it if needed
+    function observeNotifyWatchersCheckbox(checkbox) {
+        // Use MutationObserver to watch for changes
+        const observer = new MutationObserver(() => {
+            if (checkbox.checked !== notifyWatchers) {
+                checkbox.checked = notifyWatchers;
+            }
+        });
+        
+        observer.observe(checkbox, {
+            attributes: true,
+            attributeFilter: ['checked']
+        });
+    }
+    
+    // Monitor for notify watchers checkbox appearance
+    function monitorForNotifyWatchersCheckbox() {
+        let checkCount = 0;
+        const maxChecks = 20; // Check for up to 10 seconds
+        
+        const intervalId = setInterval(() => {
+            checkCount++;
+            
+            if (setNotifyWatchersCheckbox()) {
+                clearInterval(intervalId);
+            } else if (checkCount >= maxChecks) {
+                clearInterval(intervalId);
+            }
+        }, 500);
+    }
+
     // Initialize the fix
     function init() {
         if (!isConfluencePage()) {
@@ -230,6 +304,9 @@
 
         // Always observe for editor addition (handles page navigation in SPAs)
         observeEditorAddition();
+        
+        // Monitor for notify watchers checkbox
+        monitorForNotifyWatchersCheckbox();
 
         // Re-apply fix when window is resized or focused (edge cases)
         window.addEventListener('focus', () => {
