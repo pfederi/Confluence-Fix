@@ -13,6 +13,16 @@ When editing a long Confluence page (scrollable both vertically and horizontally
 
 This extension automatically applies the official Atlassian workaround without requiring you to edit Custom HTML in Confluence. The fix sets the editor body height to `auto`, which resolves the cursor jump problem.
 
+## Features
+
+- ✅ **Automatic Cursor Jump Fix** - Works automatically on all Confluence pages
+- ✅ **Toggle On/Off** - Easy enable/disable via extension icon
+- ✅ **URL Whitelist** - Restrict to specific Confluence sites
+- ✅ **Visual Indicator** - Blue icon on Confluence, gray on other sites
+- ✅ **Notify Watchers Control** - Set default state for "Notify watchers" checkbox
+- ✅ **No Data Collection** - Completely private and local
+- ✅ **Cross-Browser** - Works on Chrome, Edge, Brave, Firefox, Opera
+
 ## Installation
 
 ### Chrome / Edge / Brave / Opera (Chromium-based browsers)
@@ -77,6 +87,18 @@ You can restrict the fix to specific Confluence sites:
 5. To remove a URL, click the × button next to it
 
 **Note:** If no URLs are added, the fix will work on all Confluence sites (default behavior).
+
+### Notify Watchers Default
+
+You can control the default state of the "Notify watchers" checkbox when editing Confluence pages:
+
+1. Click the extension icon in your browser toolbar
+2. In the "Notify Watchers" section, toggle "Notify watchers by default"
+   - **On** (default): The checkbox will be checked when you edit a page
+   - **Off**: The checkbox will be unchecked when you edit a page
+3. The setting applies immediately to all Confluence pages
+
+This is useful if you frequently edit pages and don't want to notify watchers every time.
 
 ## How It Works
 
