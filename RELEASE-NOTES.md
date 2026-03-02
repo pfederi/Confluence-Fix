@@ -48,9 +48,14 @@ This ZIP file contains everything you need to install the Confluence Cursor Fix 
 
 ## Version
 
-Version 1.0.2
+Version 1.0.3
 
 ## Changelog
+
+### v1.0.3 (2025-12-30)
+- **New Feature: Notify Watchers Control** - Set default state for "Notify watchers" checkbox when editing pages
+- **UI Enhancement**: Added new toggle in popup to control notify watchers default
+- **Automatic Checkbox Management**: Extension automatically sets and maintains the checkbox state
 
 ### v1.0.2 (2025-12-30)
 - **Improved Fix Stability**: Enhanced CSS fixes with additional properties (minHeight, overflow)
